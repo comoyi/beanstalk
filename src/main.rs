@@ -1,5 +1,7 @@
 mod cli;
+mod command;
+mod lib;
 
 fn main() {
-    cli::Cli::new().run();
+    lib::App::new().run();
 }
