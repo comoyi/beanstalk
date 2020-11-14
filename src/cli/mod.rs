@@ -9,13 +9,13 @@ impl Cli {
         let subcommand_stats = clap::App::new("stats")
             .about("Print info about tubes")
             .arg(
-                clap::Arg::with_name("host")
+                clap::Arg::new("host")
                     .long("host")
                     .default_value("127.0.0.1")
                     .takes_value(true),
             )
             .arg(
-                clap::Arg::with_name("port")
+                clap::Arg::new("port")
                     .long("port")
                     .default_value("11300")
                     .takes_value(true),
@@ -24,33 +24,33 @@ impl Cli {
         let subcommand_put = clap::App::new("put")
             .about("Put data to a tube")
             .arg(
-                clap::Arg::with_name("host")
+                clap::Arg::new("host")
                     .long("host")
                     .default_value("127.0.0.1")
                     .takes_value(true),
             )
             .arg(
-                clap::Arg::with_name("port")
+                clap::Arg::new("port")
                     .long("port")
                     .default_value("11300")
                     .takes_value(true),
             )
             .arg(
-                clap::Arg::with_name("tube")
+                clap::Arg::new("tube")
                     .short('t')
                     .long("tube")
                     .takes_value(true)
                     .about("Specify a tube"),
             )
             .arg(
-                clap::Arg::with_name("delay")
+                clap::Arg::new("delay")
                     .long("delay")
                     .takes_value(true)
                     .default_value("0")
                     .about("Delay"),
             )
             .arg(
-                clap::Arg::with_name("pri")
+                clap::Arg::new("pri")
                     .long("pri")
                     .takes_value(true)
                     .default_value("1024")
@@ -61,7 +61,7 @@ impl Cli {
                     ),
             )
             .arg(
-                clap::Arg::with_name("ttr")
+                clap::Arg::new("ttr")
                     .long("ttr")
                     .takes_value(true)
                     .default_value("3600")
@@ -75,7 +75,7 @@ impl Cli {
                     ),
             )
             .arg(
-                clap::Arg::with_name("data")
+                clap::Arg::new("data")
                     .long("data")
                     .takes_value(true)
                     .about("Data"),
@@ -90,7 +90,7 @@ impl Cli {
             .get_matches();
 
         match matches.subcommand() {
-            (super::command::COMMAND_STATS, Some(matches)) => {
+            Some((super::command::COMMAND_STATS, matches)) => {
                 println!("Match stat command");
                 let command =
                     super::command::stats_command_builder::StatsCommandBuilder::new().build();
@@ -101,7 +101,7 @@ impl Cli {
                 )
                 .execute(command.to_request());
             }
-            (super::command::COMMAND_PUT, Some(matches)) => {
+            Some((super::command::COMMAND_PUT, matches)) => {
                 println!("Match put command");
                 let command = super::command::put_command_builder::PutCommandBuilder::new()
                     .delay(matches.value_of_t_or_exit("delay"))
@@ -116,7 +116,7 @@ impl Cli {
                 )
                 .execute(command.to_request());
             }
-            ("", None) => println!("No subcommand was used"),
+            None => println!("No subcommand was used"),
             _ => {}
         }
     }
