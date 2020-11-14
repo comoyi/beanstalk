@@ -91,30 +91,10 @@ impl Cli {
 
         match matches.subcommand() {
             Some((super::command::COMMAND_STATS, matches)) => {
-                println!("Match stat command");
-                let command =
-                    super::command::stats_command_builder::StatsCommandBuilder::new().build();
-                println!("Command to be executed:\n{}", command.to_request());
-                super::client::Client::new(
-                    matches.value_of_t_or_exit("host"),
-                    matches.value_of_t_or_exit("port"),
-                )
-                .execute(command.to_request());
+                super::handler::stats_handler::StatsHandler::new().handle(matches);
             }
             Some((super::command::COMMAND_PUT, matches)) => {
-                println!("Match put command");
-                let command = super::command::put_command_builder::PutCommandBuilder::new()
-                    .delay(matches.value_of_t_or_exit("delay"))
-                    .pri(matches.value_of_t_or_exit("pri"))
-                    .ttr(matches.value_of_t_or_exit("ttr"))
-                    .data(matches.value_of_t_or_exit("data"))
-                    .build();
-                println!("Command to be executed:\n{}", command.to_request());
-                super::client::Client::new(
-                    matches.value_of_t_or_exit("host"),
-                    matches.value_of_t_or_exit("port"),
-                )
-                .execute(command.to_request());
+                super::handler::put_handler::PutHandler::new().handle(matches);
             }
             None => println!("No subcommand was used"),
             _ => {}
